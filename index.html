@@ -6,20 +6,22 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: rgba(50,50,50,0.85); /* slightly colored overlay background */
+      background: rgba(50,50,50,0.85);
       color: #f8f8f8;
       font-size: 14px;
       padding: 10px;
     }
     .container {
-      background: rgba(40,40,40,0.9); /* full overlay background */
-      padding: 10px;
+      background: rgba(40,40,40,0.9);
+      padding: 6px;             /* smaller padding */
       border-radius: 8px;
+      max-width: 320px;         /* limit width */
+      margin: 0 auto;           /* center it */
     }
     .splits {
       display: grid;
-      grid-template-columns: 50px 70px 70px 60px;
-      gap: 3px 6px;
+      grid-template-columns: 40px 60px 60px 50px; /* narrower columns */
+      gap: 2px 4px;
       align-items: center;
     }
     .header {
@@ -27,7 +29,7 @@
       border-bottom: 2px solid #d28f28;
       margin-bottom: 3px;
       display: grid;
-      grid-template-columns: 50px 70px 70px 60px;
+      grid-template-columns: 40px 60px 60px 50px;
       font-size: 13px;
     }
     .total {
@@ -35,12 +37,12 @@
       border-top: 2px solid #d28f28;
       padding-top: 3px;
       display: grid;
-      grid-template-columns: 50px 70px 70px 60px;
+      grid-template-columns: 40px 60px 60px 50px;
       font-weight: bold;
       color: #d28f28;
       font-size: 13px;
     }
-    input, textarea {
+    input {
       background: rgba(0,0,0,0.7);
       border: 1px solid #555;
       color: #fff;
@@ -63,12 +65,6 @@
     .ahead { color: #00ff00; }
     .behind { color: #ff4444; }
     .gold { color: #ffd700; }
-    .textbox {
-      margin-top: 8px;
-      width: 100%;
-      height: 60px;
-      resize: none;
-    }
     .button {
       margin-top: 5px;
       background: #d28f28;
@@ -104,7 +100,7 @@
   </div>
 
   <button class="button" onclick="resetCurrentTimes()">Reset Current Times</button>
-<button class="button" onclick="setNachoBest()">Set Nacho Best</button>
+  <button class="button" onclick="setNachoBest()">Set Nacho Best</button>
 </div>
 
 <script>
@@ -122,13 +118,13 @@ function renderSplits() {
     const currentInput = document.createElement("input");
     currentInput.value = s.current;
     currentInput.placeholder = "0:00";
-    currentInput.addEventListener("input", () => { splits[idx].current = currentInput.value; updateTotals(); updateBestTextbox(); });
+    currentInput.addEventListener("input", () => { splits[idx].current = currentInput.value; updateTotals(); });
     currentInput.id = `current-${idx}`;
 
     const bestInput = document.createElement("input");
     bestInput.value = s.best;
     bestInput.placeholder = "0:00";
-    bestInput.addEventListener("input", () => { splits[idx].best = bestInput.value; updateTotals(); updateBestTextbox(); });
+    bestInput.addEventListener("input", () => { splits[idx].best = bestInput.value; updateTotals(); });
     bestInput.id = `best-${idx}`;
 
     const diffDiv = document.createElement("div");
@@ -166,22 +162,6 @@ function updateTotals() {
   document.getElementById("diff-total").textContent = formatSigned(lastCurrent - lastBest);
 }
 
-function updateBestTextbox() {
-  document.getElementById("best-textbox").value = splits.map(s => s.best).join(",");
-}
-
-function parseBestTextbox() {
-  const val = document.getElementById("best-textbox").value;
-  const times = val.split(",").map(t => t.trim());
-  splits.forEach((s, idx) => {
-    if(times[idx]) {
-      s.best = times[idx];
-      document.getElementById(`best-${idx}`).value = times[idx];
-    }
-  });
-  updateTotals();
-}
-
 function resetCurrentTimes() {
   splits.forEach((s, idx) => {
     s.current = "";
@@ -190,36 +170,6 @@ function resetCurrentTimes() {
   updateTotals();
 }
 
-function updateBestIfBeaten() {
-  splits.forEach((s, idx) => {
-    const currentSec = toSeconds(s.current);
-    const bestSec = toSeconds(s.best);
-    if(currentSec > 0 && (bestSec === 0 || currentSec < bestSec)) {
-      s.best = s.current;
-      document.getElementById(`best-${idx}`).value = s.current;
-    }
-  });
-  updateTotals();
-  updateBestTextbox();
-}
-
-function updateRecordIfFullRunBeaten() {
-  const currentTotal = splits.reduce((sum, s) => sum + toSeconds(s.current), 0);
-  const recordTotal = splits.reduce((sum, s) => sum + toSeconds(s.best), 0);
-  if(currentTotal < recordTotal || recordTotal === 0) {
-    document.getElementById("record-textbox").value = splits.map(s => s.current).join(",");
-  }
-}
-
-function toSeconds(t){ if(!t) return 0; const parts=t.split(":").map(Number); if(parts.length===2) return parts[0]*60+parts[1]; return 0; }
-function formatTime(sec){ const m=Math.floor(sec/60); const s=sec%60; return `${m}:${s.toString().padStart(2,'0')}`; }
-function formatSigned(sec){ if(sec===0) return "±0"; const sign=sec<0?"-":"+"; return `${sign}${formatTime(Math.abs(sec))}`; }
-function diffClass(diff){ if(diff<-10)return"gold"; if(diff<0)return"ahead"; if(diff>0)return"behind"; return""; }
-
-renderSplits(); updateTotals(); updateBestTextbox();
-
-document.getElementById("best-textbox").addEventListener("change", parseBestTextbox);
-
 function setNachoBest() {
   const nachoTimes = ["0:53","2:00","2:56","4:26","5:30","6:59","7:53","9:08","10:35","12:38","13:34","15:07"];
   splits.forEach((s, idx) => {
@@ -227,9 +177,14 @@ function setNachoBest() {
     document.getElementById(`best-${idx}`).value = s.best;
   });
   updateTotals();
-  updateBestTextbox();
 }
 
+function toSeconds(t){ if(!t) return 0; const parts=t.split(":").map(Number); if(parts.length===2) return parts[0]*60+parts[1]; return 0; }
+function formatTime(sec){ const m=Math.floor(sec/60); const s=sec%60; return `${m}:${s.toString().padStart(2,'0')}`; }
+function formatSigned(sec){ if(sec===0) return "±0"; const sign=sec<0?"-":"+"; return `${sign}${formatTime(Math.abs(sec))}`; }
+function diffClass(diff){ if(diff<-10)return"gold"; if(diff<0)return"ahead"; if(diff>0)return"behind"; return""; }
+
+renderSplits(); updateTotals();
 </script>
 </body>
 </html>
