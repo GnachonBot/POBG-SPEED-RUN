@@ -2,38 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PUBG Run Overlay</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: rgba(50,50,50,0.85);
-      color: #f8f8f8;
-      font-size: 14px;
-      padding: 10px;
-    }
-    .container {
-      background: rgba(40,40,40,0.9);
-      padding: 6px;             /* smaller padding */
-      border-radius: 8px;
-      max-width: 320px;         /* limit width */
-      margin: 0 auto;           /* center it */
-    }
-    .splits {
-      display: grid;
-      grid-template-columns: 40px 60px 60px 50px; /* narrower columns */
-      gap: 2px 4px;
-      align-items: center;
-    }
-    .header {
-      font-weight: bold;
-      border-bottom: 2px solid #d28f28;
-      margin-bottom: 3px;
-      display: grid;
-      grid-template-columns: 40px 60px 60px 50px;
-      font-size: 13px;
-    }
-    .total {
-      margin-top: 5px;
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POBG Speedrun Overlay</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preload" href="style.css" as="style">
+  <link rel="preload" href="script.js" as="script">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>Split</div>
+      <div>Time</div>
+      <div>Best</div>
+      <div>Δ</div>
+    </div>
+
+    <div id="split-list" class="splits"></div>
+
+    <div class="total">
+      <div>Total</div>
+      <div id="current-total">0:00</div>
+      <div id="best-total">0:00</div>
+      <div id="diff-total">0:00</div>
+    </div>
+
+    <button class="button" onclick="resetCurrentTimes()">Reset Current Times</button>
+    <button class="button" onclick="setNachoBest()">Set Nacho Best</button>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
       border-top: 2px solid #d28f28;
       padding-top: 3px;
       display: grid;
