@@ -1,0 +1,85 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: rgba(50,50,50,0.85);
+  color: #f8f8f8;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.container {
+  background: rgba(40,40,40,0.9);
+  padding: 6px;
+  border-radius: 8px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.splits {
+  display: grid;
+  grid-template-columns: 40px 60px 60px 50px;
+  gap: 2px 4px;
+  align-items: center;
+}
+
+.header {
+  font-weight: bold;
+  border-bottom: 2px solid #d28f28;
+  margin-bottom: 3px;
+  display: grid;
+  grid-template-columns: 40px 60px 60px 50px;
+  font-size: 13px;
+}
+
+.total {
+  margin-top: 5px;
+  border-top: 2px solid #d28f28;
+  padding-top: 3px;
+  display: grid;
+  grid-template-columns: 40px 60px 60px 50px;
+  font-weight: bold;
+  color: #d28f28;
+  font-size: 13px;
+}
+
+input {
+  background: rgba(0,0,0,0.7);
+  border: 1px solid #555;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  padding: 2px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.label {
+  font-weight: bold;
+  color: #ffb84d;
+  font-size: 13px;
+}
+
+.diff {
+  font-weight: bold;
+  font-size: 13px;
+  text-align: right;
+}
+
+.ahead { color: #00ff00; }
+.behind { color: #ff4444; }
+.gold { color: #ffd700; }
+
+.button {
+  margin-top: 5px;
+  background: #d28f28;
+  border: none;
+  color: #000;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.button:hover {
+  background: #ffb84d;
+}
